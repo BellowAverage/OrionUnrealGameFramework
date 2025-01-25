@@ -115,6 +115,8 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Action | InteractWithActor")
     bool IsInteractWithActor = false;
     void InteractWithActorStop();
+    UFUNCTION(BlueprintImplementableEvent)
+	void OrionPickup(AOrionActor* InTarget);
 
     // 动画蒙太奇
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Pickup")
@@ -173,6 +175,8 @@ public:
 	TArray <UStaticMeshComponent*> AttachedArrowComponents;
 
     /* Gameplay Mechanism */
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GameplayMechanism")
 	ECharaState CharaState = ECharaState::Alive;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GameplayMechanism")
 	float CurrHealth = 300.0f;

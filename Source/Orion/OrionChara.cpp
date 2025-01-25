@@ -356,27 +356,7 @@ bool AOrionChara::PickUpItem(float DeltaTime, AOrionActor* InTarget)
             bMontagePlaying = true;
             bMontageFinished = false;
 
-            TArray<UActorComponent*> Components;
-            InTarget->GetComponents(Components);
-            for (UActorComponent* Component : Components)
-            {
-                // 仅禁用静态网格体组件的物理和碰撞
-                if (UStaticMeshComponent* StaticMeshComp = Cast<UStaticMeshComponent>(Component))
-                {
-                    StaticMeshComp->SetSimulatePhysics(false);
-                    StaticMeshComp->SetEnableGravity(false);
-                    StaticMeshComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-                    UE_LOG(LogTemp, Log, TEXT("Disabled physics for StaticMeshComponent: %s"), *StaticMeshComp->GetName());
-                }
-            }
-
-            // 将目标附加到指定的骨骼
-            InTarget->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, AttachBoneName);
-			UE_LOG(LogTemp, Log, TEXT("Item attached to bone: %s"), *AttachBoneName.ToString());
-
-            // 设置角色状态为 Carrying
-            CharaState = ECharaState::Carrying;
-            return false;
+			OrionPickup(InTarget);
         }
     }
 
@@ -389,6 +369,9 @@ bool AOrionChara::PickUpItem(float DeltaTime, AOrionActor* InTarget)
             // 如果动画播放完成，返回 true
             bMontagePlaying = false;
             bMontageFinished = true;
+            // 设置角色状态为 Carrying
+            CharaState = ECharaState::Carrying;
+			InTarget->Destroy();
             return true;
         }
     }
